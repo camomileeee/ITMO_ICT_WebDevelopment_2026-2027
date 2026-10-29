@@ -589,7 +589,6 @@
 <p><strong>Описание протокола:</strong> UDP (User Datagram Protocol) — протокол транспортного уровня без установления соединения. Отправитель посылает датаграмму, не дожидаясь подтверждения от получателя. Это обеспечивает высокую скорость, но не гарантирует доставку и порядок пакетов. В Python используется <code>socket.SOCK_DGRAM</code>.</p>
 <details class="info">
 <summary>Полный листинг кода клиента и сервера</summary>
-</details>
 <p><strong>udp_server.py</strong>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 
@@ -639,6 +638,7 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">run_udp_client</span><span class="p">()</span>
 </code></pre></div></p>
+</details>
 <p><strong>Пример работы в терминале:</strong>
 <div class="highlight"><pre><span></span><code>[UDP СЕРВЕР] Запущен на 127.0.0.1:8081
 [UDP] Получено от ('127.0.0.1', 54455): Hello, server
@@ -652,11 +652,10 @@
 <p><strong>Описание протокола:</strong> TCP (Transmission Control Protocol) требует предварительного установления соединения (<code>connect</code> и <code>accept</code>) и гарантирует надежную доставку потока байтов без потерь. Для работы используется <code>socket.SOCK_STREAM</code>. В данном задании реализовано решение квадратного уравнения.</p>
 <div class="admonition note">
 <p class="admonition-title">Особенности TCP</p>
-</div>
 <p>Дополнительные накладные расходы на установку соединения полностью окупаются надёжностью: все введенные пользователем параметры гарантированно дойдут до сервера, а результат вычисления — обратно.</p>
+</div>
 <details class="info">
 <summary>Полный листинг кода калькулятора</summary>
-</details>
 <p><strong>calc_server.py</strong>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
@@ -665,49 +664,49 @@
 <span class="n">PORT</span> <span class="o">=</span> <span class="mi">8082</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">solve_quadratic</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
-<span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">"Нет решений (корректных)"</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">"Бесконечно много решений"</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Линейное уравнение, корень: x = </span><span class="si">{</span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">b</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"Нет решений (корректных)"</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">"Бесконечно много решений"</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Линейное уравнение, корень: x = </span><span class="si">{</span><span class="o">-</span><span class="n">c</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">b</span><span class="si">}</span><span class="s2">"</span>
 
-<span class="n">discriminant</span> <span class="o">=</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span>
-<span class="k">if</span> <span class="n">discriminant</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="n">x1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">discriminant</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
-    <span class="n">x2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">discriminant</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Два корня: x1 = </span><span class="si">{</span><span class="n">x1</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, x2 = </span><span class="si">{</span><span class="n">x2</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">elif</span> <span class="n">discriminant</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="n">b</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Один корень: x = </span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">real</span> <span class="o">=</span> <span class="o">-</span><span class="n">b</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
-    <span class="n">imag</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">discriminant</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">"Комплексные корни: x1 = </span><span class="si">{</span><span class="n">real</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> + </span><span class="si">{</span><span class="n">imag</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">i, x2 = </span><span class="si">{</span><span class="n">real</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">imag</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">i"</span>
+    <span class="n">discriminant</span> <span class="o">=</span> <span class="n">b</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span>
+    <span class="k">if</span> <span class="n">discriminant</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">discriminant</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">b</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">discriminant</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Два корня: x1 = </span><span class="si">{</span><span class="n">x1</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, x2 = </span><span class="si">{</span><span class="n">x2</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">elif</span> <span class="n">discriminant</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="n">b</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Один корень: x = </span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">real</span> <span class="o">=</span> <span class="o">-</span><span class="n">b</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+        <span class="n">imag</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">discriminant</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Комплексные корни: x1 = </span><span class="si">{</span><span class="n">real</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> + </span><span class="si">{</span><span class="n">imag</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">i, x2 = </span><span class="si">{</span><span class="n">real</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">imag</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">i"</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">run_calc_server</span><span class="p">():</span>
-<span class="n">server_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
-<span class="n">server_socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">server_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">))</span>
-<span class="n">server_socket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[TCP КАЛЬКУЛЯТОР] Сервер запущен на </span><span class="si">{</span><span class="n">HOST</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">PORT</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">server_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+    <span class="n">server_socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">server_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">))</span>
+    <span class="n">server_socket</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[TCP КАЛЬКУЛЯТОР] Сервер запущен на </span><span class="si">{</span><span class="n">HOST</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">PORT</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">server_socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[TCP КАЛЬКУЛЯТОР] Подключение от </span><span class="si">{</span><span class="n">addr</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
-            <span class="k">continue</span>
-        <span class="n">parts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">','</span><span class="p">)))</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">solve_quadratic</span><span class="p">(</span><span class="o">*</span><span class="n">parts</span><span class="p">)</span>
-            <span class="n">conn</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">))</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">conn</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">))</span>
-    <span class="k">finally</span><span class="p">:</span>
-        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">server_socket</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[TCP КАЛЬКУЛЯТОР] Подключение от </span><span class="si">{</span><span class="n">addr</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">','</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">solve_quadratic</span><span class="p">(</span><span class="o">*</span><span class="n">parts</span><span class="p">)</span>
+                <span class="n">conn</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">))</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-<span class="n">run_calc_server</span><span class="p">()</span>
+    <span class="n">run_calc_server</span><span class="p">()</span>
 </code></pre></div></p>
 <p><strong>calc_client.py</strong>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
@@ -734,6 +733,7 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">run_calc_client</span><span class="p">()</span>
 </code></pre></div></p>
+</details>
 <p><strong>Пример работы в терминале:</strong>
 <div class="highlight"><pre><span></span><code>[TCP КАЛЬКУЛЯТОР] Сервер запущен на 127.0.0.1:8082
 [TCP КАЛЬКУЛЯТОР] Подключение от ('127.0.0.1', 62051)
@@ -749,11 +749,10 @@
 <p><strong>Описание протокола:</strong> HTTP (HyperText Transfer Protocol) — прикладной протокол, передающий данные в виде строго форматированного текста. Для отдачи статического файла сервер формирует строку статуса, заголовок <code>Content-Length</code> (на основе размера <code>index.html</code>), пустую строку и само тело файла.</p>
 <div class="admonition note">
 <p class="admonition-title">Структура ответа</p>
-</div>
 <p>Сервер читает файл <code>index.html</code>, подсчитывает размер сгенерированной строки в байтах и формирует ответ со статусом <code>HTTP/1.1 200 OK</code>.</p>
+</div>
 <details class="info">
 <summary>Полный листинг HTTP-сервера</summary>
-</details>
 <p><strong>http_server.py</strong>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -812,6 +811,7 @@
 <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
 </code></pre></div></p>
+</details>
 <p><strong>Пример работы в терминале:</strong>
 <div class="highlight"><pre><span></span><code>[HTTP СЕРВЕР] Доступен по адресу: http://127.0.0.1:8083
 [HTTP] Запрос от ('127.0.0.1', 62792)
@@ -822,11 +822,10 @@
 <p><strong>Описание архитектуры:</strong> Реализован многопользовательский чат на протоколе TCP. Для одновременного обслуживания нескольких клиентов используется библиотека <code>threading</code>. Сервер держит список активных подключений в потокобезопасной коллекции и рассылает входящие сообщения всем участникам (Broadcast), кроме самого отправителя. Клиент реализует фоновый поток для асинхронного приема сообщений без блокировки метода <code>input()</code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Синхронизация потоков</p>
-</div>
 <p>Для безопасного изменения списка клиентов при параллельных подключениях обязательно используется <code>threading.Lock()</code>, предотвращающий состояние гонки (race condition).</p>
+</div>
 <details class="info">
 <summary>Полный листинг чата</summary>
-</details>
 <p><strong>server.py</strong>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
@@ -952,6 +951,7 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">run_client</span><span class="p">()</span>
 </code></pre></div></p>
+</details>
 <p><strong>Пример работы в терминале:</strong>
 <div class="highlight"><pre><span></span><code>[ЧАТ СЕРВЕР] Запущен на 127.0.0.1:8084
 [ПОДКЛЮЧЕНИЕ] Установлено соединение с ('127.0.0.1', 50202)
@@ -1004,7 +1004,6 @@
 </table>
 <details class="info">
 <summary>Полный листинг веб-сервера</summary>
-</details>
 <p><strong>web_server.py</strong>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_qs</span>
@@ -1095,6 +1094,7 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">run_web_server</span><span class="p">()</span>
 </code></pre></div></p>
+</details>
 <p><strong>Пример работы в терминале:</strong>
 <div class="highlight"><pre><span></span><code>[ВЕБ-СЕРВЕР ЖУРНАЛА] Запущен: http://127.0.0.1:8085
 </code></pre></div></p>
