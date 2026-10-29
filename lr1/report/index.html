@@ -589,55 +589,59 @@
 <p><strong>Описание протокола:</strong> UDP (User Datagram Protocol) — протокол транспортного уровня без установления соединения. Отправитель посылает датаграмму, не дожидаясь подтверждения от получателя. Это обеспечивает высокую скорость, но не гарантирует доставку и порядок пакетов. В Python используется <code>socket.SOCK_DGRAM</code>.</p>
 <details class="info">
 <summary>Полный листинг кода клиента и сервера</summary>
-<p><strong>udp_server.py</strong>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+<pre><code>**udp_server.py**
+```python
+import socket
 
-<span class="n">HOST</span> <span class="o">=</span> <span class="s1">'127.0.0.1'</span>
-<span class="n">PORT</span> <span class="o">=</span> <span class="mi">8081</span>
+HOST = '127.0.0.1'
+PORT = 8081
 
-<span class="k">def</span><span class="w"> </span><span class="nf">run_udp_server</span><span class="p">():</span>
-    <span class="n">server_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span>
-    <span class="n">server_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[UDP СЕРВЕР] Запущен на </span><span class="si">{</span><span class="n">HOST</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">PORT</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+def run_udp_server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server_socket.bind((HOST, PORT))
+    print(f"[UDP СЕРВЕР] Запущен на {HOST}:{PORT}")
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-            <span class="n">data</span><span class="p">,</span> <span class="n">client_address</span> <span class="o">=</span> <span class="n">server_socket</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[UDP] Получено от </span><span class="si">{</span><span class="n">client_address</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    try:
+        while True:
+            data, client_address = server_socket.recvfrom(1024)
+            message = data.decode('utf-8')
+            print(f"[UDP] Получено от {client_address}: {message}")
 
-            <span class="k">if</span> <span class="n">message</span> <span class="o">==</span> <span class="s2">"Hello, server"</span><span class="p">:</span>
-                <span class="n">response</span> <span class="o">=</span> <span class="s2">"Hello, client"</span>
-                <span class="n">server_socket</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">),</span> <span class="n">client_address</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[UDP] Отправлен ответ клиенту </span><span class="si">{</span><span class="n">client_address</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">[UDP СЕРВЕР] Остановлен."</span><span class="p">)</span>
-    <span class="k">finally</span><span class="p">:</span>
-        <span class="n">server_socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            if message == "Hello, server":
+                response = "Hello, client"
+                server_socket.sendto(response.encode('utf-8'), client_address)
+                print(f"[UDP] Отправлен ответ клиенту {client_address}: {response}")
+    except KeyboardInterrupt:
+        print("\n[UDP СЕРВЕР] Остановлен.")
+    finally:
+        server_socket.close()
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-    <span class="n">run_udp_server</span><span class="p">()</span>
-</code></pre></div></p>
-<p><strong>udp_client.py</strong>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+if __name__ == "__main__":
+    run_udp_server()
+```
 
-<span class="n">HOST</span> <span class="o">=</span> <span class="s1">'127.0.0.1'</span>
-<span class="n">PORT</span> <span class="o">=</span> <span class="mi">8081</span>
+**udp_client.py**
+```python
+import socket
 
-<span class="k">def</span><span class="w"> </span><span class="nf">run_udp_client</span><span class="p">():</span>
-    <span class="n">client_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span>
-    <span class="n">message</span> <span class="o">=</span> <span class="s2">"Hello, server"</span>
+HOST = '127.0.0.1'
+PORT = 8081
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[UDP КЛИЕНТ] Отправка: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="n">client_socket</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">),</span> <span class="p">(</span><span class="n">HOST</span><span class="p">,</span> <span class="n">PORT</span><span class="p">))</span>
+def run_udp_client():
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    message = "Hello, server"
 
-    <span class="n">data</span><span class="p">,</span> <span class="n">server_address</span> <span class="o">=</span> <span class="n">client_socket</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[UDP КЛИЕНТ] Ответ от сервера: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">'utf-8'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-    <span class="n">client_socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    print(f"[UDP КЛИЕНТ] Отправка: {message}")
+    client_socket.sendto(message.encode('utf-8'), (HOST, PORT))
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-    <span class="n">run_udp_client</span><span class="p">()</span>
-</code></pre></div></p>
+    data, server_address = client_socket.recvfrom(1024)
+    print(f"[UDP КЛИЕНТ] Ответ от сервера: {data.decode('utf-8')}")
+    client_socket.close()
+
+if __name__ == "__main__":
+    run_udp_client()
+```
+</code></pre>
 </details>
 <p><strong>Пример работы в терминале:</strong>
 <div class="highlight"><pre><span></span><code>[UDP СЕРВЕР] Запущен на 127.0.0.1:8081
