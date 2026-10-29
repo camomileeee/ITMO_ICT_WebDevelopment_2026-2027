@@ -63,6 +63,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#no1" class="md-skip">
+          Перейти к содержанию
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -273,6 +278,26 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Отчёт
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
         
@@ -290,6 +315,80 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-udp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задание 1. Обмен сообщениями по UDP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-tcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задание 2. Вычисления через TCP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-html-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задание 3. Раздача HTML-страницы по HTTP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задание 4. Чат на сокетах (Многопользовательский)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-getpost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задание 5. Простой веб-сервер (GET/POST)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -402,6 +501,71 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-udp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задание 1. Обмен сообщениями по UDP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-tcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задание 2. Вычисления через TCP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-html-http" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задание 3. Раздача HTML-страницы по HTTP
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задание 4. Чат на сокетах (Многопользовательский)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-getpost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Задание 5. Простой веб-сервер (GET/POST)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -418,9 +582,519 @@
 
 
 
-  <h1>Отчёт</h1>
+<h1 id="no1">Отчёт по лабораторной работе №1. Работа с сокетами</h1>
+<p><strong>Цель работы:</strong> Понять принципы межсокетного взаимодействия в вебе. Научиться реализовывать базовую архитектуру клиент-сервер на протоколах транспортного и прикладного уровней.</p>
+<hr />
+<h2 id="1-udp">Задание 1. Обмен сообщениями по UDP</h2>
+<p><strong>Описание протокола:</strong> UDP (User Datagram Protocol) — протокол транспортного уровня без установления соединения. Отправитель посылает датаграмму, не дожидаясь подтверждения от получателя. Это обеспечивает высокую скорость, но не гарантирует доставку и порядок пакетов. В Python используется <code>socket.SOCK_DGRAM</code>.</p>
+<p>??? info "Полный листинг кода клиента и сервера"
+    <strong>udp_server.py</strong>
+    ```python
+    import socket</p>
+<pre><code>HOST = '127.0.0.1'
+PORT = 8081
 
+def run_udp_server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server_socket.bind((HOST, PORT))
+    print(f"[UDP СЕРВЕР] Запущен на {HOST}:{PORT}")
 
+    try:
+        while True:
+            data, client_address = server_socket.recvfrom(1024)
+            message = data.decode('utf-8')
+            print(f"[UDP] Получено от {client_address}: {message}")
+
+            if message == "Hello, server":
+                response = "Hello, client"
+                server_socket.sendto(response.encode('utf-8'), client_address)
+                print(f"[UDP] Отправлен ответ клиенту {client_address}: {response}")
+    except KeyboardInterrupt:
+        print("\n[UDP СЕРВЕР] Остановлен.")
+    finally:
+        server_socket.close()
+
+if __name__ == "__main__":
+    run_udp_server()
+```
+
+**udp_client.py**
+```python
+import socket
+
+HOST = '127.0.0.1'
+PORT = 8081
+
+def run_udp_client():
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    message = "Hello, server"
+
+    print(f"[UDP КЛИЕНТ] Отправка: {message}")
+    client_socket.sendto(message.encode('utf-8'), (HOST, PORT))
+
+    data, server_address = client_socket.recvfrom(1024)
+    print(f"[UDP КЛИЕНТ] Ответ от сервера: {data.decode('utf-8')}")
+    client_socket.close()
+
+if __name__ == "__main__":
+    run_udp_client()
+```
+</code></pre>
+<p><strong>Пример работы в терминале:</strong></p>
+<pre><code class="language-text">[UDP СЕРВЕР] Запущен на 127.0.0.1:8081
+[UDP] Получено от ('127.0.0.1', 54455): Hello, server
+[UDP] Отправлен ответ клиенту ('127.0.0.1', 54455): Hello, client
+
+[UDP КЛИЕНТ] Отправка: Hello, server
+[UDP КЛИЕНТ] Ответ от сервера: Hello, client
+</code></pre>
+<hr />
+<h2 id="2-tcp">Задание 2. Вычисления через TCP</h2>
+<p><strong>Описание протокола:</strong> TCP (Transmission Control Protocol) требует предварительного установления соединения (<code>connect</code> и <code>accept</code>) и гарантирует надежную доставку потока байтов без потерь. Для работы используется <code>socket.SOCK_STREAM</code>. В данном задании реализовано решение квадратного уравнения.</p>
+<p>!!! note "Особенности TCP"
+    Дополнительные накладные расходы на установку соединения полностью окупаются надёжностью: все введенные пользователем параметры гарантированно дойдут до сервера, а результат вычисления — обратно.</p>
+<p>??? info "Полный листинг кода калькулятора"
+    <strong>calc_server.py</strong>
+    ```python
+    import socket
+    import math</p>
+<pre><code>HOST = '127.0.0.1'
+PORT = 8082
+
+def solve_quadratic(a, b, c):
+    if a == 0:
+        if b == 0:
+            return "Нет решений (корректных)" if c != 0 else "Бесконечно много решений"
+        return f"Линейное уравнение, корень: x = {-c / b}"
+
+    discriminant = b**2 - 4*a*c
+    if discriminant &gt; 0:
+        x1 = (-b + math.sqrt(discriminant)) / (2 * a)
+        x2 = (-b - math.sqrt(discriminant)) / (2 * a)
+        return f"Два корня: x1 = {x1:.2f}, x2 = {x2:.2f}"
+    elif discriminant == 0:
+        x = -b / (2 * a)
+        return f"Один корень: x = {x:.2f}"
+    else:
+        real = -b / (2 * a)
+        imag = math.sqrt(abs(discriminant)) / (2 * a)
+        return f"Комплексные корни: x1 = {real:.2f} + {imag:.2f}i, x2 = {real:.2f} - {imag:.2f}i"
+
+def run_calc_server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.bind((HOST, PORT))
+    server_socket.listen(1)
+    print(f"[TCP КАЛЬКУЛЯТОР] Сервер запущен на {HOST}:{PORT}")
+
+    while True:
+        conn, addr = server_socket.accept()
+        print(f"[TCP КАЛЬКУЛЯТОР] Подключение от {addr}")
+        try:
+            data = conn.recv(1024).decode('utf-8')
+            if not data:
+                continue
+            parts = list(map(float, data.split(',')))
+            if len(parts) == 3:
+                result = solve_quadratic(*parts)
+                conn.sendall(result.encode('utf-8'))
+        except Exception as e:
+            conn.sendall(f"Error: {str(e)}".encode('utf-8'))
+        finally:
+            conn.close()
+
+if __name__ == "__main__":
+    run_calc_server()
+```
+
+**calc_client.py**
+```python
+import socket
+
+HOST = '127.0.0.1'
+PORT = 8082
+
+def run_calc_client():
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect((HOST, PORT))
+
+    print("Решение квадратного уравнения ax^2 + bx + c = 0")
+    a = input("Введите коэффициент a: ")
+    b = input("Введите коэффициент b: ")
+    c = input("Введите коэффициент c: ")
+
+    payload = f"{a},{b},{c}"
+    client_socket.sendall(payload.encode('utf-8'))
+
+    response = client_socket.recv(1024).decode('utf-8')
+    print(f"[РЕЗУЛЬТАТ ОТ СЕРВЕРА]: {response}")
+    client_socket.close()
+
+if __name__ == "__main__":
+    run_calc_client()
+```
+</code></pre>
+<p><strong>Пример работы в терминале:</strong></p>
+<pre><code class="language-text">[TCP КАЛЬКУЛЯТОР] Сервер запущен на 127.0.0.1:8082
+[TCP КАЛЬКУЛЯТОР] Подключение от ('127.0.0.1', 62051)
+
+Решение квадратного уравнения ax^2 + bx + c = 0
+Введите коэффициент a: 2
+Введите коэффициент b: 3
+Введите коэффициент c: 4
+[РЕЗУЛЬТАТ ОТ СЕРВЕРА]: Комплексные корни: x1 = -0.75 + 1.20i, x2 = -0.75 - 1.20i
+</code></pre>
+<hr />
+<h2 id="3-html-http">Задание 3. Раздача HTML-страницы по HTTP</h2>
+<p><strong>Описание протокола:</strong> HTTP (HyperText Transfer Protocol) — прикладной протокол, передающий данные в виде строго форматированного текста. Для отдачи статического файла сервер формирует строку статуса, заголовок <code>Content-Length</code> (на основе размера <code>index.html</code>), пустую строку и само тело файла.</p>
+<p>!!! note "Структура ответа"
+    Сервер читает файл <code>index.html</code>, подсчитывает размер сгенерированной строки в байтах и формирует ответ со статусом <code>HTTP/1.1 200 OK</code>.</p>
+<p>??? info "Полный листинг HTTP-сервера"
+    <strong>http_server.py</strong>
+    ```python
+    import socket
+    import os</p>
+<pre><code>HOST = '127.0.0.1'
+PORT = 8083
+
+def run_http_server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.bind((HOST, PORT))
+    server_socket.listen(5)
+    print(f"[HTTP СЕРВЕР] Доступен по адресу: http://{HOST}:{PORT}")
+
+    while True:
+        client_conn, client_addr = server_socket.accept()
+        try:
+            request = client_conn.recv(1024).decode('utf-8')
+            print(f"[HTTP] Запрос от {client_addr}")
+
+            if os.path.exists("index.html"):
+                with open("index.html", "r", encoding="utf-8") as f:
+                    html_content = f.read()
+
+                response = (
+                    "HTTP/1.1 200 OK\r\n"
+                    "Content-Type: text/html; charset=UTF-8\r\n"
+                    f"Content-Length: {len(html_content.encode('utf-8'))}\r\n"
+                    "Connection: close\r\n"
+                    "\r\n"
+                    + html_content
+                )
+            else:
+                body = "&lt;h1&gt;404 Not Found&lt;/h1&gt;"
+                response = (
+                    "HTTP/1.1 404 Not Found\r\n"
+                    "Content-Type: text/html; charset=UTF-8\r\n"
+                    f"Content-Length: {len(body.encode('utf-8'))}\r\n"
+                    "Connection: close\r\n\r\n" + body
+                )
+
+            client_conn.sendall(response.encode('utf-8'))
+        finally:
+            client_conn.close()
+
+if __name__ == "__main__":
+    run_http_server()
+```
+
+**index.html**
+```html
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;Lab 1 - Task 3&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Привет от HTTP сервера!&lt;/h1&gt;
+    &lt;p&gt;Эта страница успешно загружена из файла index.html.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+```
+</code></pre>
+<p><strong>Пример работы в терминале:</strong></p>
+<pre><code class="language-text">[HTTP СЕРВЕР] Доступен по адресу: http://127.0.0.1:8083
+[HTTP] Запрос от ('127.0.0.1', 62792)
+[HTTP] Запрос от ('127.0.0.1', 51171)
+</code></pre>
+<hr />
+<h2 id="4">Задание 4. Чат на сокетах (Многопользовательский)</h2>
+<p><strong>Описание архитектуры:</strong> Реализован многопользовательский чат на протоколе TCP. Для одновременного обслуживания нескольких клиентов используется библиотека <code>threading</code>. Сервер держит список активных подключений в потокобезопасной коллекции и рассылает входящие сообщения всем участникам (Broadcast), кроме самого отправителя. Клиент реализует фоновый поток для асинхронного приема сообщений без блокировки метода <code>input()</code>.</p>
+<p>!!! warning "Синхронизация потоков"
+    Для безопасного изменения списка клиентов при параллельных подключениях обязательно используется <code>threading.Lock()</code>, предотвращающий состояние гонки (race condition).</p>
+<p>??? info "Полный листинг чата"
+    <strong>server.py</strong>
+    ```python
+    import socket
+    import threading</p>
+<pre><code>HOST = '127.0.0.1'
+PORT = 8084
+
+clients = []
+clients_lock = threading.Lock()
+
+def broadcast(message, exclude_socket=None):
+    with clients_lock:
+        for client in clients:
+            if client != exclude_socket:
+                try:
+                    client.sendall(message)
+                except:
+                    pass
+
+def handle_client(client_socket, client_address):
+    print(f"[ПОДКЛЮЧЕНИЕ] Установлено соединение с {client_address}")
+    try:
+        username_bytes = client_socket.recv(1024)
+        if not username_bytes: return
+
+        username = username_bytes.decode('utf-8').strip() or f"User_{client_address[1]}"
+        print(f"[ПОЛЬЗОВАТЕЛЬ] {client_address} зарегистрирован как '{username}'")
+
+        join_msg = f"[СЕРВЕР]: {username} присоединился к чату.\n"
+        broadcast(join_msg.encode('utf-8'), exclude_socket=client_socket)
+
+        while True:
+            data = client_socket.recv(1024)
+            if not data: break
+
+            message_text = data.decode('utf-8').strip()
+            if message_text.lower() == 'exit': break
+
+            formatted_msg = f"[{username}]: {message_text}\n"
+            print(f"[{username}]: {message_text}")
+            broadcast(formatted_msg.encode('utf-8'), exclude_socket=client_socket)
+    except ConnectionResetError:
+        pass
+    finally:
+        with clients_lock:
+            if client_socket in clients:
+                clients.remove(client_socket)
+        client_socket.close()
+
+        print(f"[ОТКЛЮЧЕНИЕ] {client_address} отключился.")
+        broadcast(f"[СЕРВЕР]: {username} покинул чат.\n".encode('utf-8'))
+
+def run_server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.bind((HOST, PORT))
+    server_socket.listen()
+    print(f"[ЧАТ СЕРВЕР] Запущен на {HOST}:{PORT}")
+
+    while True:
+        client_socket, client_address = server_socket.accept()
+        with clients_lock:
+            clients.append(client_socket)
+
+        client_thread = threading.Thread(target=handle_client, args=(client_socket, client_address))
+        client_thread.daemon = True
+        client_thread.start()
+
+if __name__ == "__main__":
+    run_server()
+```
+
+**client.py**
+```python
+import socket
+import threading
+import sys
+
+HOST = '127.0.0.1'
+PORT = 8084
+
+def receive_messages(sock):
+    while True:
+        try:
+            data = sock.recv(1024)
+            if not data:
+                print("\n[Соединение с сервером закрыто]")
+                break
+            sys.stdout.write('\r\033[K')
+            sys.stdout.write(data.decode('utf-8'))
+            sys.stdout.write("Вы: ")
+            sys.stdout.flush()
+        except Exception:
+            print("\n[Ошибка связи с сервером]")
+            break
+
+def run_client():
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        client_socket.connect((HOST, PORT))
+    except ConnectionRefusedError:
+        return
+
+    username = input("Введите ваше имя для входа в чат: ").strip() or "Guest"
+    client_socket.sendall(username.encode('utf-8'))
+
+    print("\n[УСПЕХ] Вы в чате! Для выхода введите 'exit'.\n")
+
+    recv_thread = threading.Thread(target=receive_messages, args=(client_socket,))
+    recv_thread.daemon = True
+    recv_thread.start()
+
+    try:
+        while True:
+            message = input("Вы: ")
+            if not message.strip(): continue
+
+            client_socket.sendall(message.encode('utf-8'))
+            if message.lower() == 'exit': break
+    except KeyboardInterrupt:
+        print("\nВыход из чата...")
+    finally:
+        client_socket.close()
+
+if __name__ == "__main__":
+    run_client()
+```
+</code></pre>
+<p><strong>Пример работы в терминале:</strong></p>
+<pre><code class="language-text">[ЧАТ СЕРВЕР] Запущен на 127.0.0.1:8084
+[ПОДКЛЮЧЕНИЕ] Установлено соединение с ('127.0.0.1', 50202)
+[ПОЛЬЗОВАТЕЛЬ] ('127.0.0.1', 50202) зарегистрирован как 'rap'
+[ПОДКЛЮЧЕНИЕ] Установлено соединение с ('127.0.0.1', 50233)
+[ПОЛЬЗОВАТЕЛЬ] ('127.0.0.1', 50233) зарегистрирован как 'bobik'
+[rap]: че как?
+[bobik]: ништяк, бро
+
+---
+Введите ваше имя для входа в чат: rap
+
+[УСПЕХ] Вы в чате! Для выхода введите 'exit'.
+
+[СЕРВЕР]: bobik присоединился к чату.
+Вы: че как?
+[bobik]: ништяк, бро
+
+---
+Введите ваше имя для входа в чат:bobik
+
+[УСПЕХ] Вы в чате! Для выхода введите 'exit'.
+
+[rap]: че как?
+Вы: ништяк, бро
+</code></pre>
+<hr />
+<h2 id="5-getpost">Задание 5. Простой веб-сервер (GET/POST)</h2>
+<p><strong>Описание архитектуры:</strong> Разработан веб-сервер для обработки HTTP-запросов, который ведёт журнал оценок. Запрос разбирается вручную (извлечение метода и тела). Данные хранятся не в виде простого текстового лога, а структурированно — группируются по дисциплинам в словаре <code>grades_db</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Метод</th>
+<th>URL</th>
+<th>Описание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/</code></td>
+<td>Отдает HTML-страницу со списком всех дисциплин, оценок и формой</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/</code></td>
+<td>Парсит тело запроса, сохраняет новую оценку и обновляет страницу</td>
+</tr>
+</tbody>
+</table>
+<p>??? info "Полный листинг веб-сервера"
+    <strong>web_server.py</strong>
+    ```python
+    import socket
+    from urllib.parse import parse_qs</p>
+<pre><code>HOST = '127.0.0.1'
+PORT = 8085
+
+grades_db = {
+    "Математический анализ": [5, 4],
+    "Веб-программирование": [5, 5]
+}
+
+def render_html():
+    items_html = ""
+    for discipline, grades in grades_db.items():
+        grades_str = ", ".join(map(str, grades))
+        items_html += f"&lt;li&gt;&lt;b&gt;{discipline}&lt;/b&gt;: Оценки: [{grades_str}]&lt;/li&gt;"
+
+    if not items_html:
+        items_html = "&lt;li&gt;Журнал пока пуст.&lt;/li&gt;"
+
+    return f"""
+    &lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset="UTF-8"&gt;
+        &lt;title&gt;Журнал оценок&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;Журнал успеваемости студентов&lt;/h1&gt;
+        &lt;ul&gt;
+            {items_html}
+        &lt;/ul&gt;
+        &lt;hr&gt;
+        &lt;h2&gt;Добавить оценку&lt;/h2&gt;
+        &lt;form method="POST" action="/"&gt;
+            &lt;label&gt;Дисциплина: &lt;input type="text" name="discipline" required&gt;&lt;/label&gt;&lt;br&gt;&lt;br&gt;
+            &lt;label&gt;Оценка (число): &lt;input type="number" name="grade" min="1" max="5" required&gt;&lt;/label&gt;&lt;br&gt;&lt;br&gt;
+            &lt;button type="submit"&gt;Отправить&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
+    """
+
+def run_web_server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.bind((HOST, PORT))
+    server_socket.listen(5)
+    print(f"[ВЕБ-СЕРВЕР ЖУРНАЛА] Запущен: http://{HOST}:{PORT}")
+
+    while True:
+        conn, addr = server_socket.accept()
+        try:
+            request_data = conn.recv(4096).decode('utf-8')
+            if not request_data:
+                conn.close()
+                continue
+
+            lines = request_data.split('\r\n')
+            method = lines[0].split(' ')[0]
+
+            if method == 'POST':
+                body_index = request_data.find('\r\n\r\n')
+                if body_index != -1:
+                    parsed_body = parse_qs(request_data[body_index+4:])
+                    discipline = parsed_body.get('discipline', [''])[0].strip()
+                    grade_str = parsed_body.get('grade', [''])[0].strip()
+
+                    if discipline and grade_str.isdigit():
+                        grades_db.setdefault(discipline, []).append(int(grade_str))
+
+            html_content = render_html()
+            response = (
+                "HTTP/1.1 200 OK\r\n"
+                "Content-Type: text/html; charset=UTF-8\r\n"
+                f"Content-Length: {len(html_content.encode('utf-8'))}\r\n"
+                "Connection: close\r\n"
+                "\r\n"
+                + html_content
+            )
+            conn.sendall(response.encode('utf-8'))
+        except Exception as e:
+            print(f"[ОШИБКА ВЕБ-СЕРВЕРА]: {e}")
+        finally:
+            conn.close()
+
+if __name__ == "__main__":
+    run_web_server()
+```
+</code></pre>
+<p><strong>Пример работы в терминале:</strong></p>
+<pre><code class="language-text">[ВЕБ-СЕРВЕР ЖУРНАЛА] Запущен: http://127.0.0.1:8085
+</code></pre>
 
 
 
