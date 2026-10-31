@@ -126,3 +126,6 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+
+AUTH_USER_MODEL = 'project_first_app.CarOwner'
